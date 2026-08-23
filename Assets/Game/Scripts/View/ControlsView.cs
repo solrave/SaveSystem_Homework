@@ -64,14 +64,14 @@ namespace Game.View
         private void OnSaveResult(bool success, int version)
         {
             Debug.Log(success
-                ? $"<color=green><b>Sucessfully saved version: {version}</b></color>"
+                ? $"<color=green><b>Successfully saved version: {version}</b></color>"
                 : "<color=red><b>Saving failed!</b></color>");
         }
 
         private void OnLoadResult(bool success, int version)
         {
             Debug.Log(success
-                ? $"<color=green><b>Sucessfully loaded version: {version}</b></color>"
+                ? $"<color=green><b>Successfully loaded version: {version}</b></color>"
                 : "<color=red><b>Loading failed!</b></color>");
         }
     }
