@@ -4,7 +4,7 @@ namespace Game.Scripts.Domain.App
 {
     public interface IRepository
     {
-        bool Save(JObject data);
-        bool TryLoad(out JObject data);
+        (bool, int) Save(JObject data);
+        (bool, int) TryLoad(int version, out JObject data);
     }
 }

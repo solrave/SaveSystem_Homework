@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Game.Scripts.Domain.App;
+using Modules.Entities;
 using Newtonsoft.Json.Linq;
+using SampleGame.Common;
 using SampleGame.Gameplay;
+using UnityEngine;
 
 namespace Game.Gameplay
 {
@@ -9,29 +13,59 @@ namespace Game.Gameplay
     {
         private IRepository _repository;
         private IComponentSerializer _serializer;
-        private ISerializableComponent[] _serializableComponents;
+        private EntityWorld _entityWorld;
 
         public SaveManager(IRepository repository,
                            IComponentSerializer serializer,
-                           ISerializableComponent[] serializableComponents)
+                           EntityWorld entityWorld)
         {
             _repository = repository;
             _serializer = serializer;
-            _serializableComponents = serializableComponents;
+            _entityWorld = entityWorld;
         }
 
-        public void Save()
+        public (bool, int) Save()
         {
-            var gameData = new JObject();
+            var saveData = new JObject();
+            List <Entity> allEntities = new List<Entity>(_entityWorld.GetAll());
             
-            foreach (var component in _serializableComponents)
+            foreach (var entity in allEntities)
             {
-                gameData.Add(component.GetType().Name, component.Serialize(_serializer));    
+                var componentData = new JObject();
+                
+                foreach (var component in entity.GetComponents<ISerializableComponent>())
+                {
+                    componentData[component.GetType().Name] = component.Serialize(_serializer);
+                }
+                
+                componentData["Transform"] = new JObject
+                {
+                    ["position"] = JObject.FromObject((SerializedVector3)entity.transform.position),
+                    ["rotation"] = JObject.FromObject((SerializedVector3)entity.transform.rotation)
+                };
+                saveData[entity.Type] = componentData;
             }
-
-            _repository.Save(gameData);
+            return _repository.Save(saveData);
         }
-        
-        public void Load(){}
+
+        public (bool, int) Load(int version)
+        {
+            (bool result, int loadVersion) = _repository.TryLoad(version, out var data);
+            
+            if (result) //saveData[entity.Type] = componentData;
+            {
+                foreach (var property in data.Properties())
+                {
+                    var type = property.Name; //entity Type
+                    var components = (JObject)property.Value; // components Dictionary
+                    var transform = (JObject)components["Transform"]; //concrete component Dictionary
+                    Vector3 position = transform["position"].ToObject<SerializedVector3>(); //concrete value from component
+                    Quaternion rotation = transform["rotation"].ToObject<SerializedVector3>(); //concrete value from component
+                    _entityWorld.Spawn(type, position, rotation);
+                }
+            }
+            
+            return (result, loadVersion);
+        }
     }
 }

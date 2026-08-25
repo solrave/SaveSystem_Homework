@@ -464,6 +464,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7013338918631047901, guid: 6a4b1a954f66d403995c53b9cbc10e69, type: 3}
   m_PrefabInstance: {fileID: 9052763697652214355}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &660827441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 660827443}
+  - component: {fileID: 660827442}
+  m_Layer: 0
+  m_Name: AppInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &660827442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 660827441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab2ae7e7d9d4e55a9bb417927257093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Domain.App.AppInstaller
+  _fileName: GameSave.txt
+--- !u!4 &660827443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 660827441}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.62185, y: -0.1, z: 6.20257}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &718333230
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,6 +974,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 847909277188690792, guid: 7ed5d852de54c4e0b82436be14f1c71f, type: 3}
   m_PrefabInstance: {fileID: 918554074}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1042317289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1042317291}
+  - component: {fileID: 1042317290}
+  m_Layer: 0
+  m_Name: SceneInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1042317290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042317289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10f5b37206854fd69076e5c6b97cd1e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.SceneInstaller
+--- !u!4 &1042317291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042317289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.62185, y: -0.1, z: 6.20257}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1046262986 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6427085210343390836, guid: 6395fffd452364adebf05de26679cea1, type: 3}
@@ -1233,6 +1322,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2dd28a4344494b3289a84529f4d562d, type: 2}
   _monoInstallers:
   - {fileID: 2121707071}
+  - {fileID: 660827442}
+  - {fileID: 1042317290}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2272,3 +2363,5 @@ SceneRoots:
   - {fileID: 2050113277}
   - {fileID: 1779306646}
   - {fileID: 2121707070}
+  - {fileID: 1042317291}
+  - {fileID: 660827443}

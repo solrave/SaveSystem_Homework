@@ -5,11 +5,11 @@ using UnityEngine;
 namespace SampleGame.Gameplay
 {
     //Can be extended
-    public sealed class TargetObject : MonoBehaviour, ISerializableComponent
-    {
-        ///Variable
-        [field: SerializeField]
-        public Entity Value { get; set; }
+        public sealed class TargetObject : MonoBehaviour, ISerializableComponent
+        {
+            ///Variable
+            [field: SerializeField]
+            public Entity Value { get; set; }
         
         public JToken Serialize(IComponentSerializer serializer)
             => serializer.Serialize(this);

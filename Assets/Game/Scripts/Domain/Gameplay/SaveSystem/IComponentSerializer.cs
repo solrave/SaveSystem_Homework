@@ -112,18 +112,27 @@ namespace SampleGame.Gameplay
 
         #region TargetObject
 
-        public JToken Serialize(TargetObject component) => JToken.FromObject(component.Value.Id);
+        public JToken Serialize(TargetObject component)
+        {
+            if (component == null || component.Value == null)
+                return JValue.CreateNull();
+    
+            return JToken.FromObject(component.Value.Type);
+        }
 
         public void Deserialize(TargetObject component, JToken token)
         {
-            var id = token.Value<int>();
+            if (token == null || token.Type == JTokenType.Null)
+                return;
+            
+            var id = token.Value<int>(); 
             
             if (_entityWorld.TryGet(id, out var entity))
                 component.Value = entity;
         }
         
         #endregion
-
+        
         #region Team
 
         public JToken Serialize(Team component) => JToken.FromObject(component.Type);
