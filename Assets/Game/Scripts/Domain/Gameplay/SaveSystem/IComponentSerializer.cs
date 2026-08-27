@@ -4,7 +4,6 @@ using System.Linq;
 using Modules.Entities;
 using Newtonsoft.Json.Linq;
 using SampleGame.Common;
-using UnityEngine;
 
 namespace SampleGame.Gameplay
 {
@@ -53,8 +52,8 @@ namespace SampleGame.Gameplay
 
         #region DestinationPoint
 
-        public JToken Serialize(DestinationPoint component) => JToken.FromObject(component.Value);
-        public void Deserialize(DestinationPoint component, JToken token) => component.Value = token.ToObject<Vector3>();
+        public JToken Serialize(DestinationPoint component) => JToken.FromObject((SerializedVector3)component.Value);
+        public void Deserialize(DestinationPoint component, JToken token) => component.Value = token.ToObject<SerializedVector3>();
 
         #endregion
 
@@ -104,7 +103,7 @@ namespace SampleGame.Gameplay
 
         public void Deserialize(ResourceBag component, JToken token)
         {
-            component.Type = Enum.Parse<ResourceType>(token["Type"].Value<string>());
+            component.Type = token["Type"].ToObject<ResourceType>();
             component.Current = token["Current"].Value<int>();
         }
 

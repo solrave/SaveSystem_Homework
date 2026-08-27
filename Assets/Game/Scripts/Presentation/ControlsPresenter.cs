@@ -19,14 +19,13 @@ namespace Game.Gameplay
 
         public void Load(string version, Action<bool, int> callback)
         {
-            if (!int.TryParse(version, out int versionNumber))
+            if (int.TryParse(version, out var versionNumber))
             {
-                callback?.Invoke(false, 0);
-                return;
+                bool result;
+                (result, versionNumber) = _saveManager.Load(versionNumber);
+                callback?.Invoke(result, versionNumber );
             }
             
-            (bool result, int loadVersion) = _saveManager.Load(versionNumber);
-            callback?.Invoke(result, loadVersion );
         }
     }
 }

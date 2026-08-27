@@ -25,9 +25,13 @@ namespace Game.Scripts.Domain.App
             }
             
             _version++;
-            data["Version"] = _version;
+            var savedData = new JObject()
+            {
+                ["Version"] = _version,
+                ["Entities"] = data
+            };
             
-            string json = data.ToString();
+            string json = savedData.ToString();
             byte[] bytes = Encoding.UTF8.GetBytes(json);
 
             try
@@ -58,7 +62,8 @@ namespace Game.Scripts.Domain.App
             {
                 byte[] bytes = File.ReadAllBytes(_filePath);
                 string json = Encoding.UTF8.GetString(bytes);
-                data = JObject.Parse(json);
+                var loadedData = JObject.Parse(json);
+                data = loadedData["Entities"].Value<JObject>();
                 Debug.Log($"{this.GetType().Name}: Loaded successfully!");
                 return (true, _version);
             }
