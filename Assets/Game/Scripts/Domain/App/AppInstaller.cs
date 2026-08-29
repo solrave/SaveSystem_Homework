@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Game.Scripts.Domain.Gameplay.SaveSystem;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,9 @@ namespace Game.Scripts.Domain.App
                 .To<FileRepository>()
                 .AsSingle()
                 .WithArguments(Path.Combine(Application.persistentDataPath, _fileName));
+                //.WithArguments(Application.persistentDataPath);
+
+            this.Container.Decorate<IRepository>().With<DebugRepository>();
         }
     }
 }
