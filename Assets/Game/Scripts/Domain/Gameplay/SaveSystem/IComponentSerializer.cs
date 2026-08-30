@@ -26,10 +26,4 @@ namespace SampleGame.Gameplay
         void Deserialize(Team component, JToken token);
 
     }
-
-    public interface ISerializableComponent
-    {
-        JToken Serialize(IComponentSerializer serializer);
-        void Deserialize(IComponentSerializer serializer, JToken data);
-    }
 }

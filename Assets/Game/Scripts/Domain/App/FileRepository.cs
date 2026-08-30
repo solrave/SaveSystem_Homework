@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -32,13 +34,18 @@ namespace Game.Scripts.Domain.App
 
             _version = FindLatestVersion();
             _version++;
+            
+            var dataString = data.ToString(Formatting.None);
+            string checksum = ComputeChecksum(dataString);
+            
             var savedData = new JObject()
             {
                 ["Version"] = _version,
+                ["Checksum"] = checksum,
                 ["Entities"] = data
             };
             
-            string json = savedData.ToString();
+            string json = savedData.ToString(Formatting.None);
             byte[] bytes = Encoding.UTF8.GetBytes(json);
             string path = DataPath;
 
@@ -87,6 +94,15 @@ namespace Game.Scripts.Domain.App
                     
                     string json = Encoding.UTF8.GetString(bytes);
                     var loadedData = JObject.Parse(json);
+                    string storedChecksum = loadedData["Checksum"]?.Value<string>();
+                    string actualChecksum = ComputeChecksum(loadedData["Entities"].ToString(Formatting.None));
+
+                    if (storedChecksum != actualChecksum)
+                    {
+                        Debug.LogError($"{this.GetType().Name}: Save file is corrupted!");
+                        return (false, 0);
+                    }
+                    
                     data = loadedData["Entities"].Value<JObject>();
                 }
 
@@ -112,6 +128,13 @@ namespace Game.Scripts.Domain.App
                     latest = v;
             }
             return latest;
+        }
+        
+        private static string ComputeChecksum(string content)
+        {
+            using SHA256 sha256 = SHA256.Create();
+            byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(content));
+            return BitConverter.ToString(hash).Replace("-", "");
         }
     }
 }
