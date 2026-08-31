@@ -44,17 +44,16 @@ namespace Game.Scripts.Domain.App
                 ["Checksum"] = checksum,
                 ["Entities"] = data
             };
-            
-            string json = savedData.ToString(Formatting.None);
-            byte[] bytes = Encoding.UTF8.GetBytes(json);
-            string path = DataPath;
 
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                using (FileStream fileStream = new FileStream(DataPath, FileMode.Create, FileAccess.Write))
+                using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+                using (JsonTextWriter jsonTextWriter = new JsonTextWriter(streamWriter))
                 {
-                    fs.Write(bytes, 0, bytes.Length);
+                    savedData.WriteTo(jsonTextWriter);
                 }
+                
                 Debug.Log($"{this.GetType().Name}: Saved successfully!");
                 return (true, _version);
             }
@@ -80,20 +79,12 @@ namespace Game.Scripts.Domain.App
 
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8))
+                using (JsonTextReader jsonTextReader = new JsonTextReader(streamReader))
                 {
-                    byte[] bytes = new byte[fs.Length];
-                    int totalRead = 0;
-                    
-                    while (totalRead < bytes.Length)
-                    {
-                        int bytesRead = fs.Read(bytes, totalRead, bytes.Length - totalRead);
-                        if (bytesRead == 0) break;
-                        totalRead = bytesRead;
-                    }
-                    
-                    string json = Encoding.UTF8.GetString(bytes);
-                    var loadedData = JObject.Parse(json);
+                    var loadedData = JObject.Load(jsonTextReader);
+                
                     string storedChecksum = loadedData["Checksum"]?.Value<string>();
                     string actualChecksum = ComputeChecksum(loadedData["Entities"].ToString(Formatting.None));
 
@@ -105,7 +96,7 @@ namespace Game.Scripts.Domain.App
                     
                     data = loadedData["Entities"].Value<JObject>();
                 }
-
+                
                 Debug.Log($"{this.GetType().Name}: Loaded successfully! Version:{_version}");
                 return (true, _version);
             }
